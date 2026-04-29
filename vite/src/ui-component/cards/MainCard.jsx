@@ -1,16 +1,9 @@
 import PropTypes from 'prop-types';
 
-// material-ui
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
+// carbon
+import { Tile } from '@carbon/react';
 
-// constant
-const headerStyle = {
-  '& .MuiCardHeader-action': { mr: 0 }
-};
+// ==============================|| MAIN CARD ||============================== //
 
 export default function MainCard({
   border = false,
@@ -28,38 +21,38 @@ export default function MainCard({
   ref,
   ...others
 }) {
-  const defaultShadow = '0 2px 14px 0 rgb(32 40 45 / 8%)';
-
   return (
-    <Card
+    <Tile
       ref={ref}
       {...others}
-      sx={(theme) => ({
-        border: border ? '1px solid' : 'none',
-        borderColor: 'divider',
-        ':hover': {
-          boxShadow: boxShadow ? shadow || defaultShadow : 'inherit'
-        },
-        ...(typeof sx === 'function' ? sx(theme) : sx || {})
-      })}
+      style={{
+        border: border ? '1px solid var(--cds-border-subtle-01)' : 'none',
+        ...sx
+      }}
     >
       {/* card header and action */}
-      {!darkTitle && title && <CardHeader sx={{ ...headerStyle, ...headerSX }} title={title} action={secondary} />}
-      {darkTitle && title && (
-        <CardHeader sx={{ ...headerStyle, ...headerSX }} title={<Typography variant="h3">{title}</Typography>} action={secondary} />
+      {title && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--cds-spacing-05)', ...headerSX }}>
+          {darkTitle ? (
+            <h3 className="cds--heading-03">{title}</h3>
+          ) : (
+            <h4 className="cds--heading-02">{title}</h4>
+          )}
+          {secondary && <div>{secondary}</div>}
+        </div>
       )}
 
       {/* content & header divider */}
-      {title && <Divider />}
+      {title && <hr style={{ border: 'none', borderTop: '1px solid var(--cds-border-subtle-01)', margin: '0 0 var(--cds-spacing-05) 0' }} />}
 
       {/* card content */}
       {content && (
-        <CardContent sx={contentSX} className={contentClass}>
+        <div style={contentSX} className={contentClass}>
           {children}
-        </CardContent>
+        </div>
       )}
       {!content && children}
-    </Card>
+    </Tile>
   );
 }
 

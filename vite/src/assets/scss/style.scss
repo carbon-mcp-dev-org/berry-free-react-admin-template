@@ -1,7 +1,18 @@
-// color variants
-@use 'sass:meta';
+// ==============================|| CARBON FOUNDATION ||============================== //
+// LAYER 1 — Token imports (spacing, theme, type, breakpoint)
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/theme' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
 
-// third party
+// LAYER 2 — Component styles (MANDATORY for all Carbon components to render)
+@use '@carbon/react';
+
+// IBM Plex font configuration
+$font-path: '@ibm/plex';
+
+// ==============================|| THIRD PARTY ||============================== //
+@use 'sass:meta';
 @use 'simplebar-react/dist/simplebar.min.css';
 
 // ==============================|| TAP HIGHLIGHT ||============================== //
