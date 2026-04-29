@@ -3,10 +3,10 @@ import { HeaderName, HeaderGlobalBar, HeaderGlobalAction } from '@carbon/react';
 import { Menu } from '@carbon/icons-react';
 
 // project imports
-import LogoSection from '../LogoSection';
-import SearchSection from './SearchSection';
-import ProfileSection from './ProfileSection';
-import NotificationSection from './NotificationSection';
+import LogoSection from ../LogoSection;
+import SearchSection from ./SearchSection;
+import ProfileSection from ./ProfileSection;
+import NotificationSection from ./NotificationSection;
 
 import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 
@@ -17,7 +17,7 @@ export default function Header() {
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
   return (
-    <>
+    <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
       {/* logo & toggler button */}
       <div style={{ width: 228, display: 'flex', alignItems: 'center' }}>
         <HeaderName prefix="">
