@@ -1,66 +1,54 @@
-// material-ui
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
+// Carbon Design System
+import { useTheme } from @carbon/react;
+import { Menu } from @carbon/icons-react;
 
 // project imports
-import LogoSection from '../LogoSection';
-import SearchSection from './SearchSection';
-import ProfileSection from './ProfileSection';
-import NotificationSection from './NotificationSection';
+import LogoSection from ../LogoSection;
+import SearchSection from ./SearchSection;
+import ProfileSection from ./ProfileSection;
+import NotificationSection from ./NotificationSection;
 
 import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
-
-// assets
-import { IconMenu2 } from '@tabler/icons-react';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 export default function Header() {
-  const theme = useTheme();
-  const downMD = useMediaQuery(theme.breakpoints.down('md'));
-
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
   return (
-    <>
+    <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
       {/* logo & toggler button */}
-      <Box sx={{ width: downMD ? 'auto' : 228, display: 'flex' }}>
-        <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 1 }}>
+      <div style={{ width: '228px', display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'block', flexGrow: 1 }}>
           <LogoSection />
-        </Box>
-        <Avatar
-          variant="rounded"
-          sx={{
-            ...theme.typography.commonAvatar,
-            ...theme.typography.mediumAvatar,
-            overflow: 'hidden',
-            transition: 'all .2s ease-in-out',
-            color: theme.vars.palette.secondary.dark,
-            background: theme.vars.palette.secondary.light,
-            '&:hover': {
-              color: theme.vars.palette.secondary.light,
-              background: theme.vars.palette.secondary.dark
-            }
-          }}
+        </div>
+        <button
           onClick={() => handlerDrawerOpen(!drawerOpen)}
+          style={{
+            width: '34px',
+            height: '34px',
+            borderRadius: '4px',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all .2s ease-in-out',
+            backgroundColor: 'var(--cds-layer-accent)',
+            color: 'var(--cds-text-primary)'
+          }}
         >
-          <IconMenu2 stroke={1.5} size="20px" />
-        </Avatar>
-      </Box>
+          <Menu size={20} />
+        </button>
+      </div>
 
       {/* header search */}
       <SearchSection />
-      <Box sx={{ flexGrow: 1 }} />
-      <Box sx={{ flexGrow: 1 }} />
+      <div style={{ flexGrow: 1 }} />
 
       {/* notification */}
       <NotificationSection />
 
       {/* profile */}
       <ProfileSection />
-    </>
+    </div>
   );
 }

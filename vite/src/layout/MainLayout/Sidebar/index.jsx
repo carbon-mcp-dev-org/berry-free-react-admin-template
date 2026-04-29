@@ -1,11 +1,5 @@
 import { memo, useMemo } from 'react';
 
-import useMediaQuery from '@mui/material/useMediaQuery';
-import Chip from '@mui/material/Chip';
-import Drawer from '@mui/material/Drawer';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-
 // project imports
 import MenuCard from './MenuCard';
 import MenuList from '../MenuList';
@@ -21,8 +15,6 @@ import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 // ==============================|| SIDEBAR DRAWER ||============================== //
 
 function Sidebar() {
-  const downMD = useMediaQuery((theme) => theme.breakpoints.down('md'));
-
   const { menuMaster } = useGetMenuMaster();
   const drawerOpen = menuMaster.isDashboardDrawerOpened;
 
@@ -32,9 +24,9 @@ function Sidebar() {
 
   const logo = useMemo(
     () => (
-      <Box sx={{ display: 'flex', p: 2 }}>
+      <div style={{ display: 'flex', padding: '16px' }}>
         <LogoSection />
-      </Box>
+      </div>
     ),
     []
   );
@@ -43,9 +35,11 @@ function Sidebar() {
     const drawerContent = (
       <>
         <MenuCard />
-        <Stack direction="row" sx={{ justifyContent: 'center', mb: 2 }}>
-          <Chip label={import.meta.env.VITE_APP_VERSION} size="small" color="default" />
-        </Stack>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+          <span style={{ fontSize: '12px', padding: '4px 8px', backgroundColor: 'var(--cds-layer-accent)', borderRadius: '4px' }}>
+            {import.meta.env.VITE_APP_VERSION}
+          </span>
+        </div>
       </>
     );
 
@@ -54,54 +48,39 @@ function Sidebar() {
 
     return (
       <>
-        {downMD ? (
-          <Box sx={drawerSX}>
-            <MenuList />
-            {drawerOpen && drawerContent}
-          </Box>
-        ) : (
-          <SimpleBar sx={{ height: 'calc(100vh - 90px)', ...drawerSX }}>
-            <MenuList />
-            {drawerOpen && drawerContent}
-          </SimpleBar>
-        )}
+        <div style={drawerSX}>
+          <MenuList />
+          {drawerOpen && drawerContent}
+        </div>
       </>
     );
-  }, [downMD, drawerOpen]);
+  }, [drawerOpen]);
 
   return (
-    <Box component="nav" sx={{ flexShrink: { md: 0 }, width: { xs: 'auto', md: drawerWidth } }} aria-label="mailbox folders">
-      {downMD || (miniDrawer && drawerOpen) ? (
-        <Drawer
-          variant={downMD ? 'temporary' : 'persistent'}
-          anchor="left"
-          open={drawerOpen}
-          onClose={() => handlerDrawerOpen(!drawerOpen)}
-          slotProps={{
-            paper: {
-              sx: {
-                mt: downMD ? 0 : 11,
-                zIndex: 1099,
-                width: drawerWidth,
-                bgcolor: 'background.default',
-                color: 'text.primary',
-                borderRight: 'none'
-              }
-            }
+    <nav style={{ flexShrink: 0, width: drawerWidth }} aria-label="mailbox folders">
+      {miniDrawer && drawerOpen ? (
+        <div
+          style={{
+            position: 'fixed',
+            left: drawerOpen ? 0 : -drawerWidth,
+            top: '88px',
+            width: drawerWidth,
+            height: 'calc(100vh - 88px)',
+            backgroundColor: 'var(--cds-layer)',
+            borderRight: '1px solid var(--cds-border-subtle)',
+            transition: 'left 0.3s ease',
+            zIndex: 1099
           }}
-          ModalProps={{ keepMounted: true }}
-          color="inherit"
         >
-          {downMD && logo}
           {drawer}
-        </Drawer>
+        </div>
       ) : (
         <MiniDrawerStyled variant="permanent" open={drawerOpen}>
           {logo}
           {drawer}
         </MiniDrawerStyled>
       )}
-    </Box>
+    </nav>
   );
 }
 

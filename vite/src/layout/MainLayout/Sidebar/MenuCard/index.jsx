@@ -1,119 +1,70 @@
 import PropTypes from 'prop-types';
 import { memo } from 'react';
 
-// material-ui
-import { useTheme } from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
-import Card from '@mui/material/Card';
-import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-
-// assets
-import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
+// Carbon Design System
+import { ProgressBar, Tile } from '@carbon/react';
+import { Table } from '@carbon/icons-react';
 
 // ==============================|| PROGRESS BAR WITH LABEL ||============================== //
 
 function LinearProgressWithLabel({ value, ...others }) {
   return (
-    <Stack sx={{ gap: 1 }}>
-      <Stack direction="row" sx={{ justifyContent: 'space-between', mt: 1.5 }}>
-        <Typography
-          variant="h6"
-          sx={{
-            color: 'primary.800'
-          }}
-        >
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px' }}>
+        <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--cds-text-primary)' }}>
           Progress
-        </Typography>
-        <Typography variant="h6" sx={{ color: 'inherit' }}>{`${Math.round(value)}%`}</Typography>
-      </Stack>
-      <LinearProgress
-        aria-label="progress of theme"
-        variant="determinate"
+        </span>
+        <span style={{ fontSize: '14px', color: 'var(--cds-text-primary)' }}>{`${Math.round(value)}%`}</span>
+      </div>
+      <ProgressBar
+        label="progress of theme"
         value={value}
+        max={100}
         {...others}
-        sx={{
-          height: 10,
-          borderRadius: 30,
-          [`&.${linearProgressClasses.colorPrimary}`]: {
-            bgcolor: 'background.paper'
-          },
-          [`& .${linearProgressClasses.bar}`]: {
-            borderRadius: 5,
-            bgcolor: 'primary.dark'
-          }
-        }}
       />
-    </Stack>
+    </div>
   );
 }
 
 // ==============================|| SIDEBAR - MENU CARD ||============================== //
 
 function MenuCard() {
-  const theme = useTheme();
-
   return (
-    <Card
-      sx={{
-        bgcolor: 'primary.light',
-        mb: 2.75,
+    <Tile
+      style={{
+        backgroundColor: 'var(--cds-layer-accent)',
+        marginBottom: '22px',
         overflow: 'hidden',
         position: 'relative',
-        '&:after': {
-          content: '""',
-          position: 'absolute',
-          width: 157,
-          height: 157,
-          bgcolor: 'primary.200',
-          borderRadius: '50%',
-          top: -105,
-          right: -96
-        }
+        padding: '16px'
       }}
     >
-      <Box sx={{ p: 2 }}>
-        <List disablePadding sx={{ pb: 1 }}>
-          <ListItem alignItems="flex-start" disableGutters disablePadding>
-            <ListItemAvatar sx={{ mt: 0 }}>
-              <Avatar
-                variant="rounded"
-                sx={{
-                  ...theme.typography.largeAvatar,
-                  borderRadius: 2,
-                  color: 'primary.main',
-                  border: 'none',
-                  bgcolor: 'background.paper'
-                }}
-              >
-                <TableChartOutlinedIcon fontSize="inherit" />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              sx={{ mt: 0 }}
-              primary={
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    color: 'primary.800'
-                  }}
-                >
-                  Get Extra Space
-                </Typography>
-              }
-              secondary={<Typography variant="caption"> 28/23 GB</Typography>}
-            />
-          </ListItem>
-        </List>
-        <LinearProgressWithLabel value={80} />
-      </Box>
-    </Card>
+      <div style={{ paddingBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+          <div
+            style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '8px',
+              backgroundColor: 'var(--cds-layer)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--cds-icon-primary)'
+            }}
+          >
+            <Table size={32} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--cds-text-primary)' }}>
+              Get Extra Space
+            </div>
+            <div style={{ fontSize: '12px', color: 'var(--cds-text-secondary)' }}>28/23 GB</div>
+          </div>
+        </div>
+      </div>
+      <LinearProgressWithLabel value={80} />
+    </Tile>
   );
 }
 
