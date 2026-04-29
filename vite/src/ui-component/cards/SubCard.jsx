@@ -1,12 +1,7 @@
 import PropTypes from 'prop-types';
 
-// material-ui
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
+// carbon
+import { Tile } from '@carbon/react';
 
 // ==============================|| CUSTOM SUB CARD ||============================== //
 
@@ -24,38 +19,42 @@ export default function SubCard({
   actions,
   ...others
 }) {
-  const defaultShadow = '0 2px 14px 0 rgb(32 40 45 / 8%)';
-
   return (
-    <Card
-      sx={(theme) => ({
-        border: '1px solid',
-        borderColor: 'divider',
-        ':hover': { boxShadow: defaultShadow },
-        ...(typeof sx === 'function' ? sx(theme) : sx || {})
-      })}
+    <Tile
+      style={{
+        border: '1px solid var(--cds-border-subtle-01)',
+        ...sx
+      }}
       {...others}
     >
       {/* card header and action */}
-      {!darkTitle && title && <CardHeader sx={{ p: 2.5 }} title={<Typography variant="h5">{title}</Typography>} action={secondary} />}
-      {darkTitle && title && <CardHeader sx={{ p: 2.5 }} title={<Typography variant="h4">{title}</Typography>} action={secondary} />}
+      {title && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 'var(--cds-spacing-05)' }}>
+          {darkTitle ? (
+            <h4 className="cds--heading-04">{title}</h4>
+          ) : (
+            <h5 className="cds--heading-02">{title}</h5>
+          )}
+          {secondary && <div>{secondary}</div>}
+        </div>
+      )}
 
       {/* content & header divider */}
-      {title && <Divider />}
+      {title && <hr style={{ border: 'none', borderTop: '1px solid var(--cds-border-subtle-01)', margin: 0 }} />}
 
       {/* card content */}
       {content && (
-        <CardContent sx={{ p: 2.5, ...contentSX }} className={contentClass || ''}>
+        <div style={{ padding: 'var(--cds-spacing-05)', ...contentSX }} className={contentClass || ''}>
           {children}
-        </CardContent>
+        </div>
       )}
       {!content && children}
 
       {/* actions & footer divider */}
-      {actions && <Divider />}
+      {actions && <hr style={{ border: 'none', borderTop: '1px solid var(--cds-border-subtle-01)', margin: 0 }} />}
 
-      {actions && <CardActions sx={{ p: 2.5, ...footerSX }}>{actions}</CardActions>}
-    </Card>
+      {actions && <div style={{ padding: 'var(--cds-spacing-05)', ...footerSX }}>{actions}</div>}
+    </Tile>
   );
 }
 

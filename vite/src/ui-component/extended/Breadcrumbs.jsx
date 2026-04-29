@@ -2,33 +2,22 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-// material-ui
-import { useTheme } from '@mui/material/styles';
-import Card from '@mui/material/Card';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import MuiBreadcrumbs from '@mui/material/Breadcrumbs';
-import Box from '@mui/material/Box';
+// carbon
+import { Breadcrumb, BreadcrumbItem, Tile } from '@carbon/react';
+import { Home, ChevronRight } from '@carbon/icons-react';
 
 // project imports
 import navigation from 'menu-items';
-
-// assets
-import { IconChevronRight, IconTallymark1 } from '@tabler/icons-react';
-import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
-import HomeIcon from '@mui/icons-material/Home';
-import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 
 // ==============================|| BREADCRUMBS TITLE ||============================== //
 
 function BTitle({ title }) {
   return (
-    <Grid>
-      <Typography variant="h4" sx={{ fontWeight: 500 }}>
+    <div>
+      <h4 className="cds--heading-04" style={{ fontWeight: 500 }}>
         {title}
-      </Typography>
-    </Grid>
+      </h4>
+    </div>
   );
 }
 
@@ -42,31 +31,15 @@ export default function Breadcrumbs({
   links,
   maxItems,
   rightAlign = true,
-  separator = IconChevronRight,
+  separator = ChevronRight,
   title = true,
   titleBottom,
   sx,
   ...others
 }) {
-  const theme = useTheme();
   const location = useLocation();
   const [main, setMain] = useState();
   const [item, setItem] = useState();
-
-  const iconSX = {
-    marginRight: 6,
-    marginTop: -2,
-    width: '1rem',
-    height: '1rem',
-    color: theme.vars.palette.secondary.main
-  };
-
-  const linkSX = {
-    display: 'flex',
-    textDecoration: 'none',
-    alignContent: 'center',
-    alignItems: 'center'
-  };
 
   let customLocation = location.pathname;
 
@@ -84,7 +57,6 @@ export default function Breadcrumbs({
     });
   });
 
-  // set active item state
   const getCollapse = (menu) => {
     if (!custom && menu.children) {
       menu.children.filter((collapse) => {
@@ -105,173 +77,102 @@ export default function Breadcrumbs({
     }
   };
 
-  // item separator
-  const SeparatorIcon = separator;
-  const separatorIcon = separator ? <SeparatorIcon stroke={1.5} size="16px" /> : <IconTallymark1 stroke={1.5} size="16px" />;
-
-  let mainContent;
-  let itemContent;
-  let breadcrumbContent = <Typography />;
+  let breadcrumbContent = <div />;
   let itemTitle = '';
-  let CollapseIcon;
-  let ItemIcon;
 
-  // collapse item
   if (main && main.type === 'collapse') {
-    CollapseIcon = main.icon ? main.icon : AccountTreeTwoToneIcon;
-    mainContent = (
-      <Typography
-        {...(main.url && { component: Link, to: main.url })}
-        variant="h6"
-        noWrap
-        sx={{
-          overflow: 'hidden',
-          lineHeight: 1.5,
-          mb: -0.625,
-          textOverflow: 'ellipsis',
-          maxWidth: { xs: 102, sm: 'unset' },
-          display: 'inline-block'
-        }}
-        color={window.location.pathname === main.url ? 'text.primary' : 'text.secondary'}
-      >
-        {icons && <CollapseIcon style={{ ...iconSX }} />}
-        {main.title}
-      </Typography>
+    const mainContent = (
+      <BreadcrumbItem>
+        {main.url ? (
+          <Link to={main.url}>{main.title}</Link>
+        ) : (
+          <span>{main.title}</span>
+        )}
+      </BreadcrumbItem>
     );
-  }
 
-  if (!custom && main && main.type === 'collapse' && main.breadcrumbs === true) {
-    breadcrumbContent = (
-      <Card sx={card === false ? { mb: 3, bgcolor: 'transparent', ...sx } : { mb: 3, bgcolor: 'background.default', ...sx }} {...others}>
-        <Box sx={{ p: 1.25, px: card === false ? 0 : 2 }}>
-          <Grid
-            container
-            direction={rightAlign ? 'row' : 'column'}
-            sx={{ justifyContent: rightAlign ? 'space-between' : 'flex-start', alignItems: rightAlign ? 'center' : 'flex-start' }}
-            spacing={1}
-          >
-            {title && !titleBottom && <BTitle title={main.title} />}
-            <Grid>
-              <MuiBreadcrumbs
-                aria-label="breadcrumb"
-                maxItems={maxItems || 8}
-                separator={separatorIcon}
-                sx={{ '& .MuiBreadcrumbs-separator': { width: 16, ml: 1.25, mr: 1.25 } }}
-              >
-                <Typography component={Link} to="/" variant="h6" sx={{ ...linkSX, color: 'text.secondary' }}>
-                  {icons && <HomeTwoToneIcon style={iconSX} />}
-                  {icon && !icons && <HomeIcon style={{ ...iconSX, marginRight: 0 }} />}
-                  {(!icon || icons) && 'Dashboard'}
-                </Typography>
+    if (!custom && main && main.type === 'collapse' && main.breadcrumbs === true) {
+      breadcrumbContent = (
+        <Tile style={card === false ? { marginBottom: 'var(--cds-spacing-06)', background: 'transparent', ...sx } : { marginBottom: 'var(--cds-spacing-06)', ...sx }} {...others}>
+          <div style={{ padding: card === false ? 0 : 'var(--cds-spacing-05)' }}>
+            <div style={{ display: 'flex', flexDirection: rightAlign ? 'row' : 'column', justifyContent: rightAlign ? 'space-between' : 'flex-start', alignItems: rightAlign ? 'center' : 'flex-start', gap: 'var(--cds-spacing-03)' }}>
+              {title && !titleBottom && <BTitle title={main.title} />}
+              <Breadcrumb noTrailingSlash>
+                <BreadcrumbItem>
+                  <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 'var(--cds-spacing-02)' }}>
+                    {icon && <Home size={16} />}
+                    Dashboard
+                  </Link>
+                </BreadcrumbItem>
                 {mainContent}
-              </MuiBreadcrumbs>
-            </Grid>
-            {title && titleBottom && <BTitle title={main.title} />}
-          </Grid>
-        </Box>
-        {card === false && divider !== false && <Divider sx={{ mt: 2 }} />}
-      </Card>
-    );
+              </Breadcrumb>
+              {title && titleBottom && <BTitle title={main.title} />}
+            </div>
+          </div>
+          {card === false && divider !== false && <hr style={{ border: 'none', borderTop: '1px solid var(--cds-border-subtle-01)', marginTop: 'var(--cds-spacing-05)' }} />}
+        </Tile>
+      );
+    }
   }
 
-  // items
   if ((item && item.type === 'item') || (item?.type === 'group' && item?.url) || custom) {
     itemTitle = item?.title;
 
-    ItemIcon = item?.icon ? item.icon : AccountTreeTwoToneIcon;
-    itemContent = (
-      <Typography
-        variant="h6"
-        noWrap
-        sx={{
-          ...linkSX,
-          color: 'text.secondary',
-          display: 'inline-block',
-          overflow: 'hidden',
-          lineHeight: 1.5,
-          mb: -0.625,
-          textOverflow: 'ellipsis',
-          maxWidth: { xs: 102, sm: 'unset' }
-        }}
-      >
-        {icons && <ItemIcon style={{ ...iconSX }} />}
+    const itemContent = (
+      <BreadcrumbItem isCurrentPage>
         {itemTitle}
-      </Typography>
+      </BreadcrumbItem>
     );
 
     let tempContent = (
-      <MuiBreadcrumbs
-        aria-label="breadcrumb"
-        maxItems={maxItems || 8}
-        separator={separatorIcon}
-        sx={{ '& .MuiBreadcrumbs-separator': { width: 16, mx: 0.75 } }}
-      >
-        <Typography component={Link} to="/" variant="h6" sx={{ ...linkSX, color: 'text.secondary' }}>
-          {icons && <HomeTwoToneIcon style={{ ...iconSX }} />}
-          {icon && !icons && <HomeIcon style={{ ...iconSX, marginRight: 0 }} />}
-          {(!icon || icons) && 'Dashboard'}
-        </Typography>
-        {mainContent}
+      <Breadcrumb noTrailingSlash>
+        <BreadcrumbItem>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 'var(--cds-spacing-02)' }}>
+            {icon && <Home size={16} />}
+            Dashboard
+          </Link>
+        </BreadcrumbItem>
+        {main && (
+          <BreadcrumbItem>
+            {main.url ? (
+              <Link to={main.url}>{main.title}</Link>
+            ) : (
+              <span>{main.title}</span>
+            )}
+          </BreadcrumbItem>
+        )}
         {itemContent}
-      </MuiBreadcrumbs>
+      </Breadcrumb>
     );
 
     if (custom && links && links?.length > 0) {
       tempContent = (
-        <MuiBreadcrumbs
-          aria-label="breadcrumb"
-          maxItems={maxItems || 8}
-          separator={separatorIcon}
-          sx={{ '& .MuiBreadcrumbs-separator': { width: 16, ml: 1.25, mr: 1.25 } }}
-        >
-          {links?.map((link, index) => {
-            CollapseIcon = link.icon ? link.icon : AccountTreeTwoToneIcon;
-
-            return (
-              <Typography
-                key={index}
-                {...(link.to && { component: Link, to: link.to })}
-                variant="h6"
-                sx={{ ...linkSX, color: 'text.secondary' }}
-              >
-                {link.icon && <CollapseIcon style={iconSX} />}
-                {link.title}
-              </Typography>
-            );
-          })}
-        </MuiBreadcrumbs>
+        <Breadcrumb noTrailingSlash>
+          {links?.map((link, index) => (
+            <BreadcrumbItem key={index} isCurrentPage={index === links.length - 1}>
+              {link.to ? (
+                <Link to={link.to}>{link.title}</Link>
+              ) : (
+                <span>{link.title}</span>
+              )}
+            </BreadcrumbItem>
+          ))}
+        </Breadcrumb>
       );
     }
 
-    // main
     if (item?.breadcrumbs !== false || custom) {
       breadcrumbContent = (
-        <Card
-          sx={
-            card === false
-              ? { mb: 3, bgcolor: 'transparent', ...sx }
-              : {
-                  mb: 3,
-                  bgcolor: 'background.default',
-                  ...sx
-                }
-          }
-          {...others}
-        >
-          <Box sx={{ p: 1.25, px: card === false ? 0 : 2 }}>
-            <Grid
-              container
-              direction={rightAlign ? 'row' : 'column'}
-              sx={{ justifyContent: rightAlign ? 'space-between' : 'flex-start', alignItems: rightAlign ? 'center' : 'flex-start' }}
-              spacing={1}
-            >
+        <Tile style={card === false ? { marginBottom: 'var(--cds-spacing-06)', background: 'transparent', ...sx } : { marginBottom: 'var(--cds-spacing-06)', ...sx }} {...others}>
+          <div style={{ padding: card === false ? 0 : 'var(--cds-spacing-05)' }}>
+            <div style={{ display: 'flex', flexDirection: rightAlign ? 'row' : 'column', justifyContent: rightAlign ? 'space-between' : 'flex-start', alignItems: rightAlign ? 'center' : 'flex-start', gap: 'var(--cds-spacing-03)' }}>
               {title && !titleBottom && <BTitle title={custom ? heading : item?.title} />}
-              <Grid>{tempContent}</Grid>
+              <div>{tempContent}</div>
               {title && titleBottom && <BTitle title={custom ? heading : item?.title} />}
-            </Grid>
-          </Box>
-          {card === false && divider !== false && <Divider sx={{ mt: 2 }} />}
-        </Card>
+            </div>
+          </div>
+          {card === false && divider !== false && <hr style={{ border: 'none', borderTop: '1px solid var(--cds-border-subtle-01)', marginTop: 'var(--cds-spacing-05)' }} />}
+        </Tile>
       );
     }
   }
@@ -292,7 +193,6 @@ Breadcrumbs.propTypes = {
   maxItems: PropTypes.number,
   rightAlign: PropTypes.bool,
   separator: PropTypes.any,
-  IconChevronRight: PropTypes.any,
   title: PropTypes.bool,
   titleBottom: PropTypes.bool,
   sx: PropTypes.any,
