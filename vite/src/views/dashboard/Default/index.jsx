@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-// material-ui
-import Grid from '@mui/material/Grid';
+// carbon
+import { Grid, Column } from '@carbon/react';
 
 // project imports
 import EarningCard from './EarningCard';
@@ -14,7 +14,7 @@ import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
 
 // assets
-import StorefrontTwoToneIcon from '@mui/icons-material/StorefrontTwoTone';
+import { ShoppingBag } from '@carbon/icons-react';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -26,44 +26,44 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <Grid container spacing={gridSpacing}>
-      <Grid size={12}>
-        <Grid container spacing={gridSpacing}>
-          <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }}>
+    <Grid fullWidth>
+      <Column lg={16} md={8} sm={4}>
+        <Grid fullWidth style={{ marginBottom: 'var(--cds-spacing-05)' }}>
+          <Column lg={5} md={4} sm={4}>
             <EarningCard isLoading={isLoading} />
-          </Grid>
-          <Grid size={{ lg: 4, md: 6, sm: 6, xs: 12 }}>
+          </Column>
+          <Column lg={5} md={4} sm={4}>
             <TotalOrderLineChartCard isLoading={isLoading} />
-          </Grid>
-          <Grid size={{ lg: 4, md: 12, sm: 12, xs: 12 }}>
-            <Grid container spacing={gridSpacing}>
-              <Grid size={{ sm: 6, xs: 12, md: 6, lg: 12 }}>
+          </Column>
+          <Column lg={6} md={8} sm={4}>
+            <Grid fullWidth>
+              <Column lg={8} md={4} sm={2}>
                 <TotalIncomeDarkCard isLoading={isLoading} />
-              </Grid>
-              <Grid size={{ sm: 6, xs: 12, md: 6, lg: 12 }}>
+              </Column>
+              <Column lg={8} md={4} sm={2}>
                 <TotalIncomeLightCard
                   {...{
                     isLoading: isLoading,
                     total: 203,
                     label: 'Total Income',
-                    icon: <StorefrontTwoToneIcon fontSize="inherit" />
+                    icon: <ShoppingBag size={24} />
                   }}
                 />
-              </Grid>
+              </Column>
             </Grid>
-          </Grid>
+          </Column>
         </Grid>
-      </Grid>
-      <Grid size={12}>
-        <Grid container spacing={gridSpacing}>
-          <Grid size={{ xs: 12, md: 8 }}>
+      </Column>
+      <Column lg={16} md={8} sm={4}>
+        <Grid fullWidth>
+          <Column lg={12} md={8} sm={4}>
             <TotalGrowthBarChart isLoading={isLoading} />
-          </Grid>
-          <Grid size={{ xs: 12, md: 4 }}>
+          </Column>
+          <Column lg={4} md={8} sm={4}>
             <PopularCard isLoading={isLoading} />
-          </Grid>
+          </Column>
         </Grid>
-      </Grid>
+      </Column>
     </Grid>
   );
 }

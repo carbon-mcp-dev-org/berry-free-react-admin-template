@@ -1,14 +1,15 @@
 import { memo, useMemo } from 'react';
 
+// carbon
+import { SideNav, SideNavItems, Tag } from '@carbon/react';
+
 // project imports
 import MenuCard from './MenuCard';
 import MenuList from '../MenuList';
 import LogoSection from '../LogoSection';
-import MiniDrawerStyled from './MiniDrawerStyled';
 
 import useConfig from 'hooks/useConfig';
 import { drawerWidth } from 'store/constant';
-import SimpleBar from 'ui-component/third-party/SimpleBar';
 
 import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 
@@ -24,7 +25,7 @@ function Sidebar() {
 
   const logo = useMemo(
     () => (
-      <div style={{ display: 'flex', padding: '16px' }}>
+      <div style={{ display: 'flex', padding: 'var(--cds-spacing-05)' }}>
         <LogoSection />
       </div>
     ),
@@ -35,52 +36,32 @@ function Sidebar() {
     const drawerContent = (
       <>
         <MenuCard />
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
-          <span style={{ fontSize: '12px', padding: '4px 8px', backgroundColor: 'var(--cds-layer-accent)', borderRadius: '4px' }}>
-            {import.meta.env.VITE_APP_VERSION}
-          </span>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 'var(--cds-spacing-05)' }}>
+          <Tag type="gray" size="sm">{import.meta.env.VITE_APP_VERSION}</Tag>
         </div>
       </>
     );
 
-    let drawerSX = { paddingLeft: '0px', paddingRight: '0px', marginTop: '20px' };
-    if (drawerOpen) drawerSX = { paddingLeft: '16px', paddingRight: '16px', marginTop: '0px' };
-
     return (
-      <>
-        <div style={drawerSX}>
-          <MenuList />
-          {drawerOpen && drawerContent}
-        </div>
-      </>
+      <div style={{ height: 'calc(100vh - 90px)', overflowY: 'auto' }}>
+        <MenuList />
+        {drawerOpen && drawerContent}
+      </div>
     );
   }, [drawerOpen]);
 
   return (
-    <nav style={{ flexShrink: 0, width: drawerWidth }} aria-label="mailbox folders">
-      {miniDrawer && drawerOpen ? (
-        <div
-          style={{
-            position: 'fixed',
-            left: drawerOpen ? 0 : -drawerWidth,
-            top: '88px',
-            width: drawerWidth,
-            height: 'calc(100vh - 88px)',
-            backgroundColor: 'var(--cds-layer)',
-            borderRight: '1px solid var(--cds-border-subtle)',
-            transition: 'left 0.3s ease',
-            zIndex: 1099
-          }}
-        >
-          {drawer}
-        </div>
-      ) : (
-        <MiniDrawerStyled variant="permanent" open={drawerOpen}>
-          {logo}
-          {drawer}
-        </MiniDrawerStyled>
-      )}
-    </nav>
+    <SideNav
+      aria-label="Side navigation"
+      expanded={drawerOpen}
+      onOverlayClick={() => handlerDrawerOpen(false)}
+      style={{ width: drawerOpen ? drawerWidth : 48 }}
+    >
+      {logo}
+      <SideNavItems>
+        {drawer}
+      </SideNavItems>
+    </SideNav>
   );
 }
 

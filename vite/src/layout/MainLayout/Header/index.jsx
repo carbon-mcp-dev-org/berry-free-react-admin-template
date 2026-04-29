@@ -1,6 +1,6 @@
-// Carbon Design System
-import { useTheme } from @carbon/react;
-import { Menu } from @carbon/icons-react;
+// carbon
+import { HeaderName, HeaderGlobalBar, HeaderGlobalAction } from '@carbon/react';
+import { Menu } from '@carbon/icons-react';
 
 // project imports
 import LogoSection from ../LogoSection;
@@ -19,36 +19,27 @@ export default function Header() {
   return (
     <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
       {/* logo & toggler button */}
-      <div style={{ width: '228px', display: 'flex', alignItems: 'center' }}>
-        <div style={{ display: 'block', flexGrow: 1 }}>
+      <div style={{ width: 228, display: 'flex', alignItems: 'center' }}>
+        <HeaderName prefix="">
           <LogoSection />
-        </div>
-        <button
+        </HeaderName>
+        <HeaderGlobalAction
+          aria-label="Toggle menu"
           onClick={() => handlerDrawerOpen(!drawerOpen)}
-          style={{
-            width: '34px',
-            height: '34px',
-            borderRadius: '4px',
-            border: 'none',
-            cursor: 'pointer',
-            transition: 'all .2s ease-in-out',
-            backgroundColor: 'var(--cds-layer-accent)',
-            color: 'var(--cds-text-primary)'
-          }}
         >
           <Menu size={20} />
-        </button>
+        </HeaderGlobalAction>
       </div>
 
       {/* header search */}
       <SearchSection />
       <div style={{ flexGrow: 1 }} />
 
-      {/* notification */}
-      <NotificationSection />
-
-      {/* profile */}
-      <ProfileSection />
-    </div>
+      {/* notification & profile */}
+      <HeaderGlobalBar>
+        <NotificationSection />
+        <ProfileSection />
+      </HeaderGlobalBar>
+    </>
   );
 }
